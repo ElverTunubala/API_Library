@@ -23,8 +23,8 @@ export class RolesGuard implements CanActivate {
     }
 
     const payload = await this.authService.verifyToken(token);
-    const userRole = payload.rol; // devuelve user o admin
-
+    const userRole = payload.role; // devuelve user o admin
+    
     if (!roles.includes(userRole)) {
       throw new ForbiddenException('You do not have permission to access this resource');
     }

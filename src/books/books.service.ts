@@ -18,9 +18,23 @@ export class BooksService {
     }
   }
 
-  async findAll() {
+  async findAll(author?: string,gender?: string,publicationDate?: Date,
+    page: number = 1,limit: number = 10
+  ): Promise<{ books: Book[]; total: number }> {
     try {
-      return await this.bookModel.find().exec();
+      const filter: any = {};
+      if (author) filter.author = author;
+      if (gender) filter.gender = gender;
+      if (publicationDate) filter.publication_date = { $gte: publicationDate };
+
+      const [books, total] = await Promise.all([
+        this.bookModel.find(filter)
+          .skip((page - 1) * limit)
+          .limit(limit)
+          .exec(),
+        this.bookModel.countDocuments(filter).exec(),
+      ]);
+      return { books, total };
     } catch (error) {
       throw new InternalServerErrorException('Error fetching books');
     }
