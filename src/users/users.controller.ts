@@ -5,7 +5,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from 'src/auth/guards/jwt-auth.guards';
 import { RolesGuard } from 'src/auth/guards/roles.guards';
 import { Roles } from 'src/common/decorators/roles.decorator';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('users')
 @Controller('users')
 @UseGuards(AuthGuard, RolesGuard)//verifica si hay token en todo el crud
 export class UsersController {
